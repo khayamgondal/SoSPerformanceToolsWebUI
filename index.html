@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+<link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css">
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+   var chart = new CanvasJS.Chart("chartContainer", {
+     theme: "theme2",
+     title: {
+       text: "SoS CPU Usage"
+     },
+     data: [
+       {
+        type: "column",
+        dataPoints: []
+        }
+        ]
+    });
+    worker();
+    function worker() {
+    $.ajax({
+        type: "GET",
+        url: "http://130.127.39.218/sos/agent-1",
+        dataType: "text",
+        success: function (data) { processData(data, 0);   },
+        complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker, 500);
+    }
+    });
+      
+    }
+  function processData(allText, index) {
+    var allLinesArray = allText.split('\n');
+    if (allLinesArray.length > 0) {
+      var dataPoints = [];
+      j = allLinesArray.length - 1 - 120;
+      if (j < 0) j=0;
+      for (var i = j; i <= allLinesArray.length - 1; i++) {
+	      var rowData = allLinesArray[i].split(',');
+	      if(rowData && rowData.length > 1)
+	        dataPoints.push({ label: rowData[0], y: parseInt(rowData[1]) });
+       }
+       chart.options.data[index].type = "line";		
+       chart.options.data[index].name = "agent 1";	
+       chart.options.data[index].showInLegend = true;
+       chart.options.data[index].dataPoints = dataPoints;
+       chart.render();
+        }
+   }
+    
+});
+    
+</script>
+<script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
+
