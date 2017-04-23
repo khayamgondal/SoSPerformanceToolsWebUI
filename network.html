@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+<link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css">
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+  var dataPoints = []
+  var dataPoints2= []
+   var chart = new CanvasJS.Chart("chartContainer", {
+     theme: "theme2",
+     title: {
+       text: "SoS Network Usage"
+     },
+     data: [
+       {
+        type: "line",
+        dataPoints: []
+        },
+        {
+        type: "line",
+        dataPoints: []
+        },
+        ]
+    });
+    worker();
+    function worker() {
+    $.ajax({
+        type: "GET",
+        url: "00007a26abf6d546",
+        dataType: "text",
+        success: function (data) { processData(data);   },
+        complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker, 500);
+    }
+    });
+      
+    }
+  function processData(allText, index) {
+
+    var allLinesArray = allText.split('\n');
+    if (allLinesArray.length > 0) {
+      var dataPoints = [];
+      var dataPoints2 = [];
+      j = allLinesArray.length - 1 - 120;
+      if (j < 0) j=0;
+      for (var i = j; i <= allLinesArray.length - 1; i++) {
+	      var rowData = allLinesArray[i].split(',');
+	      if(rowData && rowData.length > 1)
+	        dataPoints.push({ label: rowData[0], y: parseInt(rowData[1]) });
+          dataPoints2.push({ label: rowData[0], y: parseInt(rowData[2]) });
+       }
+	
+       chart.options.data[0].name = "00007a26abf6d546";	
+       chart.options.data[0].showInLegend = true;
+       chart.options.data[0].dataPoints = dataPoints;
+       //chart.options.data[1].name = "agent-1_network_in";	
+       //chart.options.data[1].showInLegend = true;
+       //chart.options.data[1].dataPoints = dataPoints2;
+       chart.render();
+        }
+   }
+    
+});
+    
+</script>
+<script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
+
