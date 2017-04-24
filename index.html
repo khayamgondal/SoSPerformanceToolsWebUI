@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>
+SoS CPU Usage
+</title>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
 <link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css">
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
@@ -9,29 +12,41 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+var totalSize = 10;
+var allCharts = []
+var agents = ['agent-1','agent-2','agent-3','agent-4','agent-5','agent-6','agent-7','agent-8','agent-9','agent-10',]
 
-   var chart = new CanvasJS.Chart("chartContainer", {
+  for (i=0; i <totalSize; i++ ) {
+  allCharts[i] = new CanvasJS.Chart("chartContainer"+i, {
      theme: "theme2",
      title: {
-       text: "SoS CPU Usage"
+       text: agents[i]
      },
      data: [
        {
-        type: "column",
+        type: "line",
         dataPoints: []
-        }
+        },
+        {
+        type: "line",
+        dataPoints: []
+        },
         ]
     });
-    worker();
-    function worker() {
+  }
+  
+    for (i=0; i <totalSize; i++ ) {
+    worker(i);
+    }
+    function worker(index) {
     $.ajax({
         type: "GET",
-        url: "agent-1",
+        url: agents[index],
         dataType: "text",
-        success: function (data) { processData(data, 0);   },
+        success: function (data) { processData(data, index);   },
         complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(worker, 500);
+      setTimeout(worker, 500, index);
     }
     });
       
@@ -47,11 +62,11 @@ $(document).ready(function () {
 	      if(rowData && rowData.length > 1)
 	        dataPoints.push({ label: rowData[0], y: parseInt(rowData[1]) });
        }
-       chart.options.data[index].type = "line";		
-       chart.options.data[index].name = "agent 1";	
-       chart.options.data[index].showInLegend = true;
-       chart.options.data[index].dataPoints = dataPoints;
-       chart.render();
+       //allCharts[index].options.data[index].type = "line";		
+       allCharts[index].options.data[0].name = agents[index];	
+       allCharts[index].options.data[0].showInLegend = true;
+       allCharts[index].options.data[0].dataPoints = dataPoints;
+       allCharts[index].render();
         }
    }
     
@@ -61,7 +76,16 @@ $(document).ready(function () {
 <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 <body>
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer0" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer3" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer4" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer5" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer6" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer7" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer8" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer9" style="height: 300px; width: 100%;"></div>
 </body>
 </html>
 
