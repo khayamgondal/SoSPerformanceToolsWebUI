@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>
+Total SoS Throughput
+</title>
+
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
 <link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css">
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
@@ -59,9 +63,9 @@ $(document).ready(function () {
        chart.options.data[0].name = "trans";	
        chart.options.data[0].showInLegend = true;
        chart.options.data[0].dataPoints = dataPoints;
-       chart.options.data[1].name = "recev";	
-       chart.options.data[1].showInLegend = true;
-       chart.options.data[1].dataPoints = dataPoints2;
+       //chart.options.data[1].name = "recev";	
+       //chart.options.data[1].showInLegend = true;
+       //chart.options.data[1].dataPoints = dataPoints2;
        chart.render();
         }
    }

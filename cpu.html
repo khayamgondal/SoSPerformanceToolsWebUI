@@ -14,14 +14,17 @@ SoS CPU Usage
 $(document).ready(function () {
 var totalSize = 10;
 var allCharts = []
-var agents = ['agent-1','agent-2','agent-3','agent-4','agent-5','agent-6','agent-7','agent-8','agent-9','agent-10',]
+var agents = ['agent-1','agent-2','agent-3','agent-4','agent-6','agent-7','agent-8','agent-9',]
 
-  for (i=0; i <totalSize; i++ ) {
+  for (i=0; i <agents.length; i++ ) {
   allCharts[i] = new CanvasJS.Chart("chartContainer"+i, {
      theme: "theme2",
      title: {
        text: agents[i]
      },
+     axisY:{
+     maximum: 100,
+   },
      data: [
        {
         type: "line",

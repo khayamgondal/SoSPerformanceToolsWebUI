@@ -17,12 +17,12 @@ $(document).ready(function () {
   var dataPoints2= []
   var totalSize = 6;
   var allCharts = []
-  var dpids = ['0000568bd0332248','000066a7b55ebc40','00007a26abf6d546','000092830d15fe48','0000b600e9c51046','0000f2501e20b94e']
+  var dpids = ['192.168.1.11','192.168.1.12','192.168.1.13','192.168.1.16','192.168.1.17','192.168.1.18']
   for (i=0; i <totalSize; i++ ) {
   allCharts[i] = new CanvasJS.Chart("chartContainer"+i, {
      theme: "theme2",
      title: {
-       text: "Agent Name"
+       text: dpids[i]
      },
      data: [
        {
@@ -83,8 +83,8 @@ $(document).ready(function () {
           dataPoints2.push({ label: rowData[0], y: parseInt(rowData[2]) });
        }
 	
-       allCharts[index].options.data[0].name = dpids[index];	
-       allCharts[index].options.data[0].showInLegend = true;
+       //allCharts[index].options.data[0].name = "transfer rate Gbps";
+       //allCharts[index].options.data[0].showInLegend = true;
        allCharts[index].options.data[0].dataPoints = dataPoints;
        //chart.options.data[1].name = "agent-1_network_in";	
        //chart.options.data[1].showInLegend = true;

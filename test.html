@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+<link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css">
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+   var chart1 = new CanvasJS.Chart("chartContainer1", {
+     theme: "theme2",
+     title: {
+       text: "SoS CPU Usage 1"
+     },
+     data: [
+       {
+        type: "column",
+        dataPoints: []
+        }
+        ]
+    });
+    var chart6 = new CanvasJS.Chart("chartContainer6", {
+     theme: "theme2",
+     title: {
+       text: "SoS CPU Usage 6"
+     },
+     data: [
+       {
+        type: "column",
+        dataPoints: []
+        }
+        ]
+    });
+    worker1();
+    worker6();
+    function worker1() {
+    $.ajax({
+        type: "GET",
+        url: "agent-1",
+        dataType: "text",
+        success: function (data) { processData1(data, 0);   },
+        complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker1, 500);
+    }
+    });
+    
+    }
+    
+    
+    function worker6() {
+    $.ajax({
+        type: "GET",
+        url: "agent-6",
+        dataType: "text",
+        success: function (data) { processData6(data, 0);   },
+        complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker6, 500);
+    }
+    });
+    
+    }
+  function processData1(allText, index) {
+    var allLinesArray = allText.split('\n');
+    if (allLinesArray.length > 0) {
+      var dataPoints = [];
+      j = allLinesArray.length - 1 - 120;
+      if (j < 0) j=0;
+      for (var i = j; i <= allLinesArray.length - 1; i++) {
+	      var rowData = allLinesArray[i].split(',');
+	      if(rowData && rowData.length > 1)
+	        dataPoints.push({ label: rowData[0], y: parseInt(rowData[1]) });
+       }
+       chart1.options.data[index].type = "line";		
+       chart1.options.data[index].name = "agent 1";	
+       chart1.options.data[index].showInLegend = true;
+       chart1.options.data[index].dataPoints = dataPoints;
+       chart1.render();
+        }
+   }
+   function processData6(allText, index) {
+    var allLinesArray = allText.split('\n');
+    if (allLinesArray.length > 0) {
+      var dataPoints = [];
+      j = allLinesArray.length - 1 - 120;
+      if (j < 0) j=0;
+      for (var i = j; i <= allLinesArray.length - 1; i++) {
+	      var rowData = allLinesArray[i].split(',');
+	      if(rowData && rowData.length > 1)
+	        dataPoints.push({ label: rowData[0], y: parseInt(rowData[1]) });
+       }
+       chart6.options.data[index].type = "line";		
+       chart6.options.data[index].name = "agent 6";	
+       chart6.options.data[index].showInLegend = true;
+       chart6.options.data[index].dataPoints = dataPoints;
+       chart6.render();
+       }
+   } 
+});
+    
+</script>
+<script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer6" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
